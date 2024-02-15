@@ -95,7 +95,7 @@ def compute_means(time_series, first_year, last_year):
                 if years_mean.get(year_cursor) is None:
                     years_mean[year_cursor] = 0
                 years_mean[year_cursor] = (years_mean[year_cursor] * (existing_months - 1) + int(line[1]))/existing_months
-    if int(last_year) == int(first_year) + 1 and not (years_mean.get(int(first_year)) is None and years_mean.get(int(last_year)) is None):
+    if int(last_year) == int(first_year) + 1 and ((years_mean.get(int(first_year)) is None) != (years_mean.get(int(last_year)) is None)):
         years_mean = {}
     else:
         if years_mean.get(int(first_year)) is None:
@@ -103,4 +103,3 @@ def compute_means(time_series, first_year, last_year):
         if years_mean.get(int(last_year)) is None:
             raise ExamException("Errore, 'last_year' non presente nel dataset")
     return years_mean
-
