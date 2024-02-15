@@ -25,15 +25,18 @@ class CSVTimeSeriesFile(CSVFile):
             elements[-1] = elements[-1].strip()
             if elements[0] != 'date' :
                 if re.match(r'^\d{4}-\d{2}$', elements[0]) and elements[1].isdigit():
-                    if year is not None:
-                        if int(elements[0].split('-')[0]) < year:
-                            raise ExamException("Errore, timestamp non ordinato")
-                        elif int(elements[0].split('-')[0]) == year:
-                            if int(elements[0].split('-')[1]) < month:
+                    if int(elements[0].split('-')[1]) <= 12 and int(elements[0].split('-')[1]) >= 1:
+                        if year is not None:
+                            if int(elements[0].split('-')[0]) < year:
                                 raise ExamException("Errore, timestamp non ordinato")
-                    year = int(elements[0].split('-')[0])
-                    month = int(elements[0].split('-')[1])
-                    data.append(elements)
+                            elif int(elements[0].split('-')[0]) == year:
+                                if int(elements[0].split('-')[1]) < month:
+                                    raise ExamException("Errore, timestamp non ordinato")
+                                if int(elements[0].split('-')[1]) == month:
+                                    raise ExamException("Errore, timestamp duplicati")
+                        year = int(elements[0].split('-')[0])
+                        month = int(elements[0].split('-')[1])
+                        data.append(elements)
         my_file.close()
         if has_duplicates(data):
             raise ExamException("Errore, timestamp duplicati")
